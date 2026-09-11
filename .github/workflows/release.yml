@@ -48,6 +48,14 @@ jobs:
             libgtk-3-dev:arm64 \
             libcairo2-dev:arm64
 
+      - name: Pre-fetch and patch gotk3
+        # El bug upstream hace que gotk3 v0.6.4 no compile; parchear antes
+        # de la primera llamada de go mod tidy desde goreleaser.
+        run: |
+          go mod download
+          chmod +x ./patch-callback.sh
+          ./patch-callback.sh
+
       - name: Create tag
         run: |
           git config user.name "4rgs-bot"
