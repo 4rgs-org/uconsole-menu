@@ -35,7 +35,7 @@ done
 
 ARCH="$(uname -m)"
 case "$ARCH" in
-  aarch64) ASSET_ARCH="aarch64" ;;
+  aarch64) ASSET_ARCH="arm64" ;;
   x86_64)  ASSET_ARCH="x86_64"  ;;
   armv7l)  ASSET_ARCH="armv7"   ;;
   *)
