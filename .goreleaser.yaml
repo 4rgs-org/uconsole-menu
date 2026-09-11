@@ -1,0 +1,54 @@
+version: 2
+
+project_name: uconsole-menu
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: linux-arm64
+    main: .
+    binary: uconsole-menu
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - linux
+    goarch:
+      - arm64
+    flags:
+      - -trimpath
+      - -ldflags=-s -w
+    tags:
+      - gtk_3_24
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+      - install.sh
+    info:
+      owner: 4rgs-org
+      description: Native GTK3 launcher for the uConsole CM4
+
+checksum:
+  name_template: 'SHA256SUMS'
+  algorithm: sha256
+
+release:
+  github:
+    owner: 4rgs-org
+    name: uconsole-menu
+  draft: false
+  prerelease: auto
+  header: |
+    ## uconsole-menu {{ .Tag }}
+  footer: |
+    ## Install
+
+    ```sh
+    curl -sSL https://raw.githubusercontent.com/4rgs-org/uconsole-menu/main/install.sh | sh
+    ```

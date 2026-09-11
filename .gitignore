@@ -1,4 +1,5 @@
-/
-!/README.md
-!/LICENSE
-!/install.sh
+/uconsole-menu
+/uconsole-installer
+/.idea
+/.vscode
+.DS_Store
