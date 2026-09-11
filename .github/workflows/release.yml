@@ -1,10 +1,11 @@
 name: release
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag a crear y publicar (ej: v0.1.0)'
+        required: true
 
 permissions:
   contents: write
@@ -46,6 +47,13 @@ jobs:
           sudo apt-get install -y \
             libgtk-3-dev:arm64 \
             libcairo2-dev:arm64
+
+      - name: Create tag
+        run: |
+          git config user.name "4rgs-bot"
+          git config user.email "alvaro.gonzalez.dev@gmail.com"
+          git tag -a "${{ inputs.tag }}" -m "Release ${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
