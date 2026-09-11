@@ -26,8 +26,18 @@ jobs:
       - name: Enable arm64 apt sources
         run: |
           sudo dpkg --add-architecture arm64
-          sudo sed -i 's/^deb /deb [arch=amd64] /' /etc/apt/sources.list
-          sudo sed -i 's/^deb /deb [arch=arm64] /' /etc/apt/sources.list.d/ubuntu.sources 2>/dev/null || true
+          # Elimina la fuente de security: no expone arm64 y rompe el update.
+          sudo rm -f /etc/apt/sources.list.d/ubuntu.sources
+          sudo rm -f /etc/apt/sources.list.d/*ubuntu.sources
+          sudo rm -f /etc/apt/sources.list.d/*arm64*
+          sudo rm -f /etc/apt/sources.list.d/*ports*
+          # Reescribe sources.list para que archive sirva para ambos arches.
+          sudo bash -c 'cat > /etc/apt/sources.list <<EOF
+          deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+          deb [arch=arm64] http://archive.ubuntu.com/ubuntu jammy main restricted universe multiverse
+          deb [arch=amd64] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          deb [arch=arm64] http://archive.ubuntu.com/ubuntu jammy-updates main restricted universe multiverse
+          EOF'
 
       - name: Install ARM64 cross toolchain and GTK dev packages
         run: |
