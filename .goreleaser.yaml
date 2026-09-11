@@ -12,6 +12,9 @@ builds:
     binary: uconsole-menu
     env:
       - CGO_ENABLED=1
+      - CC=aarch64-linux-gnu-gcc
+      - CXX=aarch64-linux-gnu-g++
+      - PKG_CONFIG=/usr/bin/aarch64-linux-gnu-pkg-config
     goos:
       - linux
     goarch:
