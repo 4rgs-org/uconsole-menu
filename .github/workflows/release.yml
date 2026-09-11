@@ -54,10 +54,11 @@ jobs:
       - name: Pre-fetch and patch gotk3
         # El bug upstream hace que gotk3 v0.6.4 no compile; parchear antes
         # de la primera llamada de go mod tidy desde goreleaser.
+        # GOFLAGS=-mod=mod fuerza la descarga de los sources del módulo.
         run: |
-          go mod download
           chmod +x ./patch-callback.sh
-          sudo ./patch-callback.sh
+          sudo HOME=/root go mod download
+          sudo HOME=/root ./patch-callback.sh
 
       - name: Create tag
         run: |
