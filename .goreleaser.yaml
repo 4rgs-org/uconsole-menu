@@ -30,9 +30,6 @@ archives:
       - README.md
       - LICENSE
       - install.sh
-    info:
-      owner: 4rgs-org
-      description: Native GTK3 launcher for the uConsole CM4
 
 checksum:
   name_template: 'SHA256SUMS'
