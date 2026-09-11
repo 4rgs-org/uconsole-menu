@@ -54,16 +54,27 @@ jobs:
       - name: Pre-fetch and patch gotk3
         # El bug upstream hace que gotk3 v0.6.4 no compile; parchear antes
         # de la primera llamada de go mod tidy desde goreleaser.
-        # GOFLAGS=-mod=mod fuerza la descarga de los sources del módulo.
         run: |
           chmod +x ./patch-callback.sh
-          sudo HOME=/root go mod download
+          sudo HOME=/root go mod download -x
           sudo HOME=/root ./patch-callback.sh
+
+      - name: Bootstrap go.sum
+        # Genera go.sum con los hashes de los módulos descargados, necesario
+        # para que goreleaser no falle al cargar el módulo cache. Se commitea
+        # antes de correr goreleaser para que el push no se queje de dirty.
+        run: |
+          sudo HOME=/root go mod tidy
+          sudo HOME=/root cp -f go.sum go.sum.new
+          sudo chown $(id -u):$(id -g) go.sum.new
+          mv go.sum.new go.sum
+          git add go.sum || true
+          git config user.name "4rgs-bot"
+          git config user.email "alvaro.gonzalez.dev@gmail.com"
+          git commit -m "Update go.sum after gotk3 patch" || true
 
       - name: Create tag
         run: |
-          git config user.name "4rgs-bot"
-          git config user.email "alvaro.gonzalez.dev@gmail.com"
           git tag -a "${{ inputs.tag }}" -m "Release ${{ inputs.tag }}"
           git push origin "${{ inputs.tag }}"
 

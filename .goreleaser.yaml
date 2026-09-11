@@ -4,9 +4,7 @@ project_name: uconsole-menu
 
 before:
   hooks:
-    # `go mod tidy` está desactivado porque modifica go.mod/go.sum y deja el
-    # árbol en dirty state, lo que falla el push a GitHub.
-    # - go mod tidy
+    - go mod tidy
 
 builds:
   - id: linux-arm64
