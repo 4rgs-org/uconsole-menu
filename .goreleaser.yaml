@@ -18,7 +18,6 @@ builds:
       - arm64
     flags:
       - -trimpath
-      - -ldflags=-s -w
     tags:
       - gtk_3_24
 
